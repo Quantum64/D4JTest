@@ -1,6 +1,7 @@
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.event.domain.message.MessageCreateEvent
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import java.io.IOException
 import java.io.InputStream
 import java.util.Random
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
                                 channel.createMessage { spec ->
                                     spec.addFile("data", RandomInputStream(5000000))
                                     spec.setContent("here is your file")
-                                }
+                                }.subscribeOn(Schedulers.boundedElastic())
                             }
 
                         }.then(),
